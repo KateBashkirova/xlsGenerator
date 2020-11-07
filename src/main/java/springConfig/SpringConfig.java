@@ -12,7 +12,7 @@ import org.thymeleaf.spring5.view.ThymeleafViewResolver;
 
 @EnableWebMvc //поддерживает веб-функции
 @Configuration
-@ComponentScan({"springConfig"})
+@ComponentScan({"springConfig", "mainFunctions", "controllers"})
 
 public class SpringConfig implements WebMvcConfigurer { //с этим интерфейсом реализуем метод cVR
     //внедряем appCont для tResolver
@@ -34,7 +34,7 @@ public class SpringConfig implements WebMvcConfigurer { //с этим интер
 
     @Override
     public void addViewControllers(ViewControllerRegistry registry) {
-        registry.addViewController("/").setViewName("formPage");
+        registry.addViewController("/").setViewName("createNewOrder");
     }
 
     @Bean
