@@ -1,5 +1,7 @@
 package mainFunctions;
 
+import java.util.ArrayList;
+
 public class Order {
     public String productName;
     public Integer productAmount;
@@ -49,5 +51,15 @@ public class Order {
 
     public void setPricePerUnit(Float pricePerUnit) {
         this.pricePerUnit = pricePerUnit;
+    }
+
+    public ArrayList<String> getTotalOrderInfo() {
+        ArrayList<String> totalOrderInfo = null;
+        totalOrderInfo.add(getProductName());
+        totalOrderInfo.add(String.valueOf(getProductAmount()));
+        totalOrderInfo.add(String.valueOf(getPricePerUnit()));
+        totalOrderInfo.add(getDeliveryDate());
+        totalOrderInfo.add(getCourierDelivery());
+        return totalOrderInfo;
     }
 }
