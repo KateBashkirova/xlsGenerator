@@ -1,4 +1,4 @@
-package mainFunctions;
+package POJO;
 
 import java.util.ArrayList;
 
