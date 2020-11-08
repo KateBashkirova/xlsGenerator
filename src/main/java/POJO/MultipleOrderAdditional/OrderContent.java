@@ -2,6 +2,7 @@ package POJO.MultipleOrderAdditional;
 
 public class OrderContent {
     private String productID;
+    private String productName;
     private Integer quantity;
     private Float pricePerUnit;
 
@@ -11,6 +12,14 @@ public class OrderContent {
 
     public void setProductID(String productID) {
         this.productID = productID;
+    }
+
+    public String getProductName() {
+        return productName;
+    }
+
+    public void setProductName(String productName) {
+        this.productName = productName;
     }
 
     public Integer getQuantity() {

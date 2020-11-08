@@ -4,13 +4,17 @@ package POJO;
 import POJO.MultipleOrderAdditional.ClientInfo;
 import POJO.MultipleOrderAdditional.CustomerAddress;
 import POJO.MultipleOrderAdditional.OrderContent;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.List;
 
 public class MultipleOrder {
     public Integer orderID;
+    @JsonProperty("content") // без него до массива массивов не дотягивается
     public List<OrderContent> contentList;
+    @JsonProperty("clientInfo")
     public List<ClientInfo> clientInfoList;
+    @JsonProperty("address")
     public List<CustomerAddress> addressList;
 
 
@@ -22,9 +26,7 @@ public class MultipleOrder {
         this.orderID = orderID;
     }
 
-    public List<OrderContent> getContentList() {
-        return contentList;
-    }
+    public List<OrderContent> getContentList() { return contentList; }
 
     public void setContentList(List<OrderContent> contentList) {
         this.contentList = contentList;
