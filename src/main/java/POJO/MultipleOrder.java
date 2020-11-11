@@ -10,7 +10,7 @@ import java.util.List;
 
 public class MultipleOrder {
     public Integer orderID;
-    @JsonProperty("content") // без него до массива массивов не дотягивается
+    @JsonProperty("content")
     public List<OrderContent> contentList;
     @JsonProperty("clientInfo")
     public List<ClientInfo> clientInfoList;
@@ -46,5 +46,14 @@ public class MultipleOrder {
 
     public void setAddressList(List<CustomerAddress> addressList) {
         this.addressList = addressList;
+    }
+
+    public List<String> getFullOrderSize() {
+        List<String> fullOrderSize = null;
+        assert false;
+        fullOrderSize.add(getContentList().toString());
+        fullOrderSize.add(getClientInfoList().toString());
+        fullOrderSize.add(getAddressList().toString());
+        return fullOrderSize;
     }
 }

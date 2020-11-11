@@ -33,16 +33,16 @@ function createMultipleOrder() {
     var json = JSON.stringify(order);
     var request = new XMLHttpRequest();
     request.open("POST", "./createMultipleOrder", true);
-    // request.responseType = "blob";
+    request.responseType = "blob";
     request.setRequestHeader("Content-Type", "application/json");
-    // request.onload = function () {
-    //     var blob = request.response;
-    //     var link = document.createElement('a');
-    //     link.href = window.URL.createObjectURL(blob);
-    //     link.download = "order.xls";
-    //     link.click();
-    // }
+    request.onload = function () {
+        var blob = request.response;
+        var link = document.createElement('a');
+        link.href = window.URL.createObjectURL(blob);
+        link.download = "order.xls";
+        link.click();
+    }
     request.send(json);
     alert(json);
-    // return false;
+    return false;
 }

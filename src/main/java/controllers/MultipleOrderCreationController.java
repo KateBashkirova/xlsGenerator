@@ -1,15 +1,28 @@
 package controllers;
 
 import POJO.MultipleOrder;
-import POJO.MultipleOrderAdditional.ClientInfo;
-import POJO.MultipleOrderAdditional.CustomerAddress;
-import POJO.MultipleOrderAdditional.OrderContent;
+import customExeptions.ExceedingLineLimitException;
+import mainFunctions.MultipleOrderFileBuilder;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.util.ArrayList;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
+import java.util.Arrays;
 import java.util.List;
+
 
 @Controller
 public class MultipleOrderCreationController {
@@ -22,10 +35,58 @@ public class MultipleOrderCreationController {
     }
 
     @PostMapping(value = "/createMultipleOrder", consumes = "application/json")
-    public void createOrder(@RequestBody MultipleOrder multipleOrder) {
-        List<OrderContent> orderContent = multipleOrder.getContentList();
-        List<ClientInfo> clientInfo = multipleOrder.getClientInfoList();
-        List<CustomerAddress> customerAddress = multipleOrder.getAddressList();
-        System.out.println(orderContent.get(0).getProductName());
+    public ResponseEntity<ByteArrayResource> createOrder(@RequestBody MultipleOrder multipleOrder) throws ExceedingLineLimitException, IOException, InvocationTargetException {
+//        System.out.println(orderContent.get(0).getProductName());
+
+        // FIXME: list vs array vs array list?
+        Object[] orderContentArray = multipleOrder.getContentList().toArray();
+        Object[] clientInfoArray = multipleOrder.getClientInfoList().toArray();
+        Object[] clientAddressArray = multipleOrder.getAddressList().toArray();
+
+        List<Object> orderContentList = Arrays.asList(multipleOrder.getContentList().toArray());
+        List<Object> clientInfoList = Arrays.asList(multipleOrder.getClientInfoList().toArray());
+        List<Object> clientAddressList = Arrays.asList(multipleOrder.getAddressList().toArray());
+
+        MultipleOrderFileBuilder mofb = new MultipleOrderFileBuilder();
+        // set values
+        mofb.orderContent(orderContentList)
+                .clientInfo(clientInfoList)
+                .clientAddress(clientAddressList);
+        // make list with order info (content + client name needed)
+        XSSFWorkbook workbook = mofb.buildWorkbook("Orders", orderContentList);
+
+
+        // записываем созданный в памяти Excel документ в файл
+        try (FileOutputStream out = new FileOutputStream(new File("D:\\File.xls"))) {
+            workbook.write(out);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        workbook.write(bos);
+        ByteArrayResource bt = new ByteArrayResource(bos.toByteArray());
+        HttpHeaders headers = getHttpHeaders();
+        return new ResponseEntity<>(bt, headers, HttpStatus.OK);
+
+//        // создать воркбук и листы
+//        List<String> sheetNames = null;
+//        assert false;
+//        sheetNames.add("Orders");
+//        sheetNames.add("Clients");
+//        createSheets(sheetNames);
+//
+//        // сделать строки
+//        List<String> infoForSheets = null;
+//        infoForSheets.add(orderContent.toString());
+//        infoForSheets.add(clientInfo.toString());
+//        createRows(infoForSheets, 0);
+    }
+
+    private HttpHeaders getHttpHeaders() {
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.valueOf("application/vnd.ms-excel"));
+        headers.add("Content-Disposition", "attachment;filename=" + "order.xls");
+        return headers;
     }
 }
