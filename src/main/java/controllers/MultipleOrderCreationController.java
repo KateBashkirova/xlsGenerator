@@ -20,8 +20,6 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
-import java.util.Arrays;
-import java.util.List;
 
 
 @Controller
@@ -36,24 +34,9 @@ public class MultipleOrderCreationController {
 
     @PostMapping(value = "/createMultipleOrder", consumes = "application/json")
     public ResponseEntity<ByteArrayResource> createOrder(@RequestBody MultipleOrder multipleOrder) throws ExceedingLineLimitException, IOException, InvocationTargetException {
-//        System.out.println(orderContent.get(0).getProductName());
-
-        // FIXME: list vs array vs array list?
-        Object[] orderContentArray = multipleOrder.getContentList().toArray();
-        Object[] clientInfoArray = multipleOrder.getClientInfoList().toArray();
-        Object[] clientAddressArray = multipleOrder.getAddressList().toArray();
-
-        List<Object> orderContentList = Arrays.asList(multipleOrder.getContentList().toArray());
-        List<Object> clientInfoList = Arrays.asList(multipleOrder.getClientInfoList().toArray());
-        List<Object> clientAddressList = Arrays.asList(multipleOrder.getAddressList().toArray());
 
         MultipleOrderFileBuilder mofb = new MultipleOrderFileBuilder();
-        // set values
-        mofb.orderContent(orderContentList)
-                .clientInfo(clientInfoList)
-                .clientAddress(clientAddressList);
-        // make list with order info (content + client name needed)
-        XSSFWorkbook workbook = mofb.buildWorkbook("Orders", orderContentList);
+        XSSFWorkbook workbook = mofb.buildWorkbook("Order", multipleOrder.getContentList());
 
 
         // записываем созданный в памяти Excel документ в файл
@@ -68,19 +51,6 @@ public class MultipleOrderCreationController {
         ByteArrayResource bt = new ByteArrayResource(bos.toByteArray());
         HttpHeaders headers = getHttpHeaders();
         return new ResponseEntity<>(bt, headers, HttpStatus.OK);
-
-//        // создать воркбук и листы
-//        List<String> sheetNames = null;
-//        assert false;
-//        sheetNames.add("Orders");
-//        sheetNames.add("Clients");
-//        createSheets(sheetNames);
-//
-//        // сделать строки
-//        List<String> infoForSheets = null;
-//        infoForSheets.add(orderContent.toString());
-//        infoForSheets.add(clientInfo.toString());
-//        createRows(infoForSheets, 0);
     }
 
     private HttpHeaders getHttpHeaders() {

@@ -6,6 +6,7 @@ import POJO.MultipleOrderAdditional.CustomerAddress;
 import POJO.MultipleOrderAdditional.OrderContent;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class MultipleOrder {
@@ -26,14 +27,24 @@ public class MultipleOrder {
         this.orderID = orderID;
     }
 
-    public List<OrderContent> getContentList() { return contentList; }
+    public List<ClientInfo> getClientInfoList() {
+        return clientInfoList;
+    }
+
+    public ArrayList<String> getContentList() {
+        ArrayList<String> fullOrderContent = new ArrayList<>();
+        for (OrderContent orderContent : contentList) {
+            assert false;
+            fullOrderContent.add(orderContent.getProductID());
+            fullOrderContent.add(orderContent.getProductName());
+            fullOrderContent.add(String.valueOf(orderContent.getQuantity()));
+            fullOrderContent.add(String.valueOf(orderContent.getPricePerUnit()));
+        }
+        return fullOrderContent;
+    }
 
     public void setContentList(List<OrderContent> contentList) {
         this.contentList = contentList;
-    }
-
-    public List<ClientInfo> getClientInfoList() {
-        return clientInfoList;
     }
 
     public void setClientInfoList(List<ClientInfo> clientInfoList) {
@@ -46,14 +57,5 @@ public class MultipleOrder {
 
     public void setAddressList(List<CustomerAddress> addressList) {
         this.addressList = addressList;
-    }
-
-    public List<String> getFullOrderSize() {
-        List<String> fullOrderSize = null;
-        assert false;
-        fullOrderSize.add(getContentList().toString());
-        fullOrderSize.add(getClientInfoList().toString());
-        fullOrderSize.add(getAddressList().toString());
-        return fullOrderSize;
     }
 }
