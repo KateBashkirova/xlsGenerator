@@ -1,4 +1,4 @@
-package mainFunctions;
+package xlsBuilders;
 
 public class PriceCounter {
     public static float getTotalPrice(Integer productAmount, Float pricePerUnit, String courierDelivery) {
