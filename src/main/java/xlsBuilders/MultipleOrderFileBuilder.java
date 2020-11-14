@@ -1,4 +1,4 @@
-package mainFunctions;
+package xlsBuilders;
 
 import customExeptions.ExceedingLineLimitException;
 import org.apache.poi.ss.usermodel.Row;
@@ -21,26 +21,6 @@ public class MultipleOrderFileBuilder {
     private static final int MAX_ROW_NUMBER = 1048576;
     private static final int MAX_CELL_NUMBER = 16384;
     private static final int MAX_CELL_LENGTH = 32767;
-
-//    // создать лист(ы)
-//    public static void createSheets(List<String> sheetNames) {
-//        for (String name : sheetNames) {
-//            // название листа (safeSheetName если вдруг название будет вводить пользователь)
-//            String sheetName = WorkbookUtil.createSafeSheetName(name);
-//            // поместить созданный лист в файл
-//            Sheet sheet = workbook.createSheet(sheetName);
-//            sheets.add(sheet);
-//        }
-//    }
-
-//    // создаём строки на листе
-//    public static void createRows(List<String> sheetsInfo, int sheetNumber) throws ExceedingLineLimitException {
-//        for (int totalRows = 0; totalRows < MAX_ROW_NUMBER; totalRows++) {
-//            Row row = sheets.get(sheetNumber).createRow(totalRows);
-//            rows.add(row);
-//            if (totalRows == MAX_ROW_NUMBER) throw new ExceedingLineLimitException("Exceeded maximum row number");
-//        }
-//    }
 
     public XSSFWorkbook buildWorkbook(String sheetName, List<Object> values) throws ExceedingLineLimitException, InvocationTargetException {
         cSheet(sheetName, values);
@@ -80,14 +60,6 @@ public class MultipleOrderFileBuilder {
         }
     }
 
-//    public static void createCell(Row row, int startCell, int totalCellNumber) throws ExceedingLineLimitException {
-//        if (totalCellNumber == MAX_CELL_NUMBER) throw new ExceedingLineLimitException("Exceeded maximum cell number");
-//        for (int i = startCell; i<totalCellNumber; i++) {
-//            row.createCell(i);
-//        }
-//    }
-
-
     public MultipleOrderFileBuilder orderContent(List<Object> orderContent) {
         MultipleOrderFileBuilder.orderContent = orderContent;
         return this;
@@ -102,5 +74,4 @@ public class MultipleOrderFileBuilder {
         MultipleOrderFileBuilder.clientAddress = clientAddress;
         return this;
     }
-
 }
