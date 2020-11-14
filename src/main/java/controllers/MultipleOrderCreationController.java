@@ -68,19 +68,6 @@ public class MultipleOrderCreationController {
         ByteArrayResource bt = new ByteArrayResource(bos.toByteArray());
         HttpHeaders headers = getHttpHeaders();
         return new ResponseEntity<>(bt, headers, HttpStatus.OK);
-
-//        // создать воркбук и листы
-//        List<String> sheetNames = null;
-//        assert false;
-//        sheetNames.add("Orders");
-//        sheetNames.add("Clients");
-//        createSheets(sheetNames);
-//
-//        // сделать строки
-//        List<String> infoForSheets = null;
-//        infoForSheets.add(orderContent.toString());
-//        infoForSheets.add(clientInfo.toString());
-//        createRows(infoForSheets, 0);
     }
 
     private HttpHeaders getHttpHeaders() {
