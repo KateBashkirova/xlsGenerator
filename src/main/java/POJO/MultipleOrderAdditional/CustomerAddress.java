@@ -28,4 +28,10 @@ public class CustomerAddress {
     public void setHouseAddress(String houseAddress) {
         this.houseAddress = houseAddress;
     }
+
+    @Override
+    public String toString() {
+        // разделитель в виде пробела не подойдёт, поскольку в названии товара может быть пробел
+        return country + ';' + city + ';' + houseAddress;
+    }
 }

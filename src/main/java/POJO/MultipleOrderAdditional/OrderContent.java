@@ -1,10 +1,10 @@
 package POJO.MultipleOrderAdditional;
 
 public class OrderContent {
-    private String productID;
-    private String productName;
-    private Integer quantity;
-    private Float pricePerUnit;
+    public String productID;
+    public String productName;
+    public Integer quantity;
+    public Float pricePerUnit;
 
     public String getProductID() {
         return productID;
@@ -36,5 +36,11 @@ public class OrderContent {
 
     public void setPricePerUnit(Float pricePerUnit) {
         this.pricePerUnit = pricePerUnit;
+    }
+
+    @Override
+    public String toString() {
+        // разделитель в виде пробела не подойдёт, поскольку в названии товара может быть пробел
+        return productID + ';' + productName + ';' + quantity + ';' + pricePerUnit + ';';
     }
 }

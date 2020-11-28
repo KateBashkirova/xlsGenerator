@@ -35,7 +35,7 @@ public class MultipleOrderCreationController {
     }
 
     @PostMapping(value = "/createMultipleOrder", consumes = "application/json")
-    public ResponseEntity<ByteArrayResource> createOrder(@RequestBody MultipleOrder multipleOrder) throws ExceedingLineLimitException, IOException, InvocationTargetException {
+    public ResponseEntity<ByteArrayResource> createOrder(@RequestBody MultipleOrder multipleOrder) throws ExceedingLineLimitException, IOException, InvocationTargetException, IllegalAccessException, NoSuchFieldException, InstantiationException {
 //        System.out.println(orderContent.get(0).getProductName());
 
         // FIXME: list vs array vs array list?
@@ -48,16 +48,14 @@ public class MultipleOrderCreationController {
         List<Object> clientAddressList = Arrays.asList(multipleOrder.getAddressList().toArray());
 
         MultipleOrderFileBuilder mofb = new MultipleOrderFileBuilder();
-        // set values
-        mofb.orderContent(orderContentList)
-                .clientInfo(clientInfoList)
-                .clientAddress(clientAddressList);
+
         // make list with order info (content + client name needed)
+//        String[] sheetNames = {"Orders", "Clients"};
         XSSFWorkbook workbook = mofb.buildWorkbook("Orders", orderContentList);
 
 
         // записываем созданный в памяти Excel документ в файл
-        try (FileOutputStream out = new FileOutputStream(new File("D:\\File.xls"))) {
+        try (FileOutputStream out = new FileOutputStream(new File("D:\\MultipleOrderFile.xls"))) {
             workbook.write(out);
         } catch (IOException e) {
             e.printStackTrace();
