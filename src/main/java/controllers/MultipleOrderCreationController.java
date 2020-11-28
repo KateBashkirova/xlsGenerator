@@ -35,7 +35,7 @@ public class MultipleOrderCreationController {
     }
 
     @PostMapping(value = "/createMultipleOrder", consumes = "application/json")
-    public ResponseEntity<ByteArrayResource> createOrder(@RequestBody MultipleOrder multipleOrder) throws ExceedingLineLimitException, IOException, InvocationTargetException {
+    public ResponseEntity<ByteArrayResource> createOrder(@RequestBody MultipleOrder multipleOrder) throws ExceedingLineLimitException, IOException, InvocationTargetException, IllegalAccessException, NoSuchFieldException, InstantiationException {
 //        System.out.println(orderContent.get(0).getProductName());
 
         // FIXME: list vs array vs array list?
@@ -52,7 +52,9 @@ public class MultipleOrderCreationController {
         mofb.orderContent(orderContentList)
                 .clientInfo(clientInfoList)
                 .clientAddress(clientAddressList);
+
         // make list with order info (content + client name needed)
+//        String[] sheetNames = {"Orders", "Clients"};
         XSSFWorkbook workbook = mofb.buildWorkbook("Orders", orderContentList);
 
 
