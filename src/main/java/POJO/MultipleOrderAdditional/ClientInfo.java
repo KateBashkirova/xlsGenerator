@@ -28,4 +28,10 @@ public class ClientInfo {
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
+
+    @Override
+    public String toString() {
+        // разделитель в виде пробела не подойдёт, поскольку в названии товара может быть пробел
+        return name + ';' + email + ';' + phoneNumber;
+    }
 }

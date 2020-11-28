@@ -48,10 +48,6 @@ public class MultipleOrderCreationController {
         List<Object> clientAddressList = Arrays.asList(multipleOrder.getAddressList().toArray());
 
         MultipleOrderFileBuilder mofb = new MultipleOrderFileBuilder();
-        // set values
-        mofb.orderContent(orderContentList)
-                .clientInfo(clientInfoList)
-                .clientAddress(clientAddressList);
 
         // make list with order info (content + client name needed)
 //        String[] sheetNames = {"Orders", "Clients"};
@@ -59,7 +55,7 @@ public class MultipleOrderCreationController {
 
 
         // записываем созданный в памяти Excel документ в файл
-        try (FileOutputStream out = new FileOutputStream(new File("D:\\File.xls"))) {
+        try (FileOutputStream out = new FileOutputStream(new File("D:\\MultipleOrderFile.xls"))) {
             workbook.write(out);
         } catch (IOException e) {
             e.printStackTrace();
