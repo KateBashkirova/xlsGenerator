@@ -50,7 +50,6 @@ public class MultipleOrderCreationController {
         MultipleOrderFileBuilder mofb = new MultipleOrderFileBuilder();
 
         // make list with order info (content + client name needed)
-//        String[] sheetNames = {"Orders", "Clients"};
         XSSFWorkbook workbook = mofb.buildWorkbook("Orders", orderContentList);
 
 
