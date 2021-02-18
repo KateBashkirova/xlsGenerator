@@ -72,6 +72,7 @@ public class FileBuilder {
 
     // создаём строки на листе
     public static ArrayList<Row> createRow(Sheet sheet, int startRow, int totalRows) throws ExceedingLineLimitException {
+        // TODO: обработать исключение, чтобы не крашилось с сообщением об ошибке
         if (totalRows == MAX_ROW_NUMBER) throw new ExceedingLineLimitException("Exceeded maximum row number");
         ArrayList<Row> rows = null;
         for (int i = startRow; i < totalRows; i++) {
@@ -83,15 +84,17 @@ public class FileBuilder {
 
     // создаём столбцы в выбранных строках
     public static void createCell(Row row, int startCell, int totalCellNumber) throws ExceedingLineLimitException {
+        // TODO: обработать исключение, чтобы не крашилось с сообщением об ошибке
         if (totalCellNumber == MAX_CELL_NUMBER) throw new ExceedingLineLimitException("Exceeded maximum cell number");
         for (int i = startCell; i<totalCellNumber; i++) {
             row.createCell(i);
         }
     }
 
-    // заполняем строковыми данными всю строку сразу
+    // создаём ячейки(столбцы) в строке и сразу же их заполняем
     public static void fillRowWithString(Row row, ArrayList<String> values) throws ExceedingLineLimitException {
         for (int i = 0; i < values.size(); i++) {
+            // TODO: обработать исключение, чтобы не крашилось с сообщением об ошибке
             if (values.get(i).length() == MAX_CELL_LENGTH) throw new ExceedingLineLimitException("Exceeded maximum cell length");
             row.createCell(i).setCellValue(values.get(i));
         }
