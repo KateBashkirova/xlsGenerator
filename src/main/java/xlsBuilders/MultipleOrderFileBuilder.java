@@ -31,7 +31,7 @@ public class MultipleOrderFileBuilder {
 
     public XSSFWorkbook buildWorkbook(String sheetName, List<String> headlines) throws ExceedingLineLimitException {
         createSheet(sheetName);
-        fillInfo(headlines, 0);
+        setHeadlines(headlines);
         fillInfo(orderContentList, 1);
         return workbook;
     }
@@ -55,6 +55,19 @@ public class MultipleOrderFileBuilder {
 //            rowNumber++;
 //        }
 //    }
+
+    public void setHeadlines(List<String> sheetHeadlines) {
+        Row row = sheet.createRow(0);
+        for(int i = 0; i < sheetHeadlines.size(); i++) {
+            row.createCell(i).setCellValue(sheetHeadlines.get(i));
+        }
+        // auto-size columns
+        int lastCellNum = sheet.getRow(0).getLastCellNum(); //вернёт индекс последней ячейки (считает незаполненные)
+        // подстраиваем колонки под текст
+        for(int j=0; j<lastCellNum; j++) {
+            sheet.autoSizeColumn(j);
+        }
+    }
 
     // todo: перенос строки при заполнении 2+ товаров
     public void fillInfo(List<String> info, int startRowNumber) throws ExceedingLineLimitException {
