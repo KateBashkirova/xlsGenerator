@@ -41,6 +41,7 @@ public class OrderContent {
     @Override
     public String toString() {
         // разделитель в виде пробела не подойдёт, поскольку в названии товара может быть пробел
-        return productID + ';' + productName + ';' + quantity + ';' + pricePerUnit + ';';
+//        return productID + ';' + productName + ';' + quantity + ';' + pricePerUnit + ';';
+        return productID + ';' + productName + ';' + quantity + ';' + pricePerUnit + '\n';
     }
 }

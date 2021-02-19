@@ -19,8 +19,8 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
-import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 
@@ -35,22 +35,34 @@ public class MultipleOrderCreationController {
     }
 
     @PostMapping(value = "/createMultipleOrder", consumes = "application/json")
-    public ResponseEntity<ByteArrayResource> createOrder(@RequestBody MultipleOrder multipleOrder) throws ExceedingLineLimitException, IOException, InvocationTargetException, IllegalAccessException, NoSuchFieldException, InstantiationException {
-//        System.out.println(orderContent.get(0).getProductName());
+    public ResponseEntity<ByteArrayResource> createOrder(@RequestBody MultipleOrder multipleOrder) throws ExceedingLineLimitException, IOException {
 
-        // FIXME: list vs array vs array list?
-        Object[] orderContentArray = multipleOrder.getContentList().toArray();
-        Object[] clientInfoArray = multipleOrder.getClientInfoList().toArray();
-        Object[] clientAddressArray = multipleOrder.getAddressList().toArray();
+//        List<Object> orderContentList = Arrays.asList(multipleOrder.getContentList().toArray());
+//        List<Object> clientInfoList = Arrays.asList(multipleOrder.getClientInfoList().toArray());
+//        List<Object> clientAddressList = Arrays.asList(multipleOrder.getAddressList().toArray());
 
-        List<Object> orderContentList = Arrays.asList(multipleOrder.getContentList().toArray());
-        List<Object> clientInfoList = Arrays.asList(multipleOrder.getClientInfoList().toArray());
-        List<Object> clientAddressList = Arrays.asList(multipleOrder.getAddressList().toArray());
+        List<Object> orderContentList = Collections.singletonList(multipleOrder.getContentList());
+        List<Object> clientInfoList = Collections.singletonList(multipleOrder.getClientInfoList());
+        List<Object> clientAddressList = Collections.singletonList(multipleOrder.getAddressList());
 
-        MultipleOrderFileBuilder mofb = new MultipleOrderFileBuilder();
+        // заголовки ячеек
+        List<String> sheetHeadlines = new ArrayList<>();
+        sheetHeadlines.add("Order number");
+        sheetHeadlines.add("Product name");
+        sheetHeadlines.add("Product amount");
+        sheetHeadlines.add("Price");
 
-        // make list with order info (content + client name needed)
-        XSSFWorkbook workbook = mofb.buildWorkbook("Orders", orderContentList);
+        MultipleOrderFileBuilder builder = new MultipleOrderFileBuilder();
+        XSSFWorkbook workbook = builder
+                .orderContentList(orderContentList)
+                .clientInfoList(clientInfoList)
+                .clientAddressList(clientAddressList)
+                .buildWorkbook("Orders", sheetHeadlines);
+
+//        MultipleOrderFileBuilder mofb = new MultipleOrderFileBuilder();
+//
+//        // make list with order info (content + client name needed)
+//        XSSFWorkbook workbook = mofb.buildWorkbook("Orders", orderContentList);
 
 
         // записываем созданный в памяти Excel документ в файл
