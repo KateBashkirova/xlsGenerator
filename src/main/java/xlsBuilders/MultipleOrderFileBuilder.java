@@ -42,20 +42,6 @@ public class MultipleOrderFileBuilder {
         sheet = workbook.createSheet(name);
     }
 
-//    public void createSheet(String sheetName, List<Object> objectList) throws ExceedingLineLimitException {
-//        // create list in workbook
-//        String name = WorkbookUtil.createSafeSheetName(sheetName);
-//        sheet = workbook.createSheet(name);
-//
-//        int rowNumber = 1; // потому что нулевая строка занята названиями колонок
-//        for(Object object : objectList) {
-//            String classFieldValues = object.toString();
-//            List<String> readyFields = new ArrayList<>(Arrays.asList(classFieldValues.split(";")));
-//            fillInfo(readyFields, rowNumber);
-//            rowNumber++;
-//        }
-//    }
-
     public void setHeadlines(List<String> sheetHeadlines) {
         Row row = sheet.createRow(0);
         for(int i = 0; i < sheetHeadlines.size(); i++) {
@@ -69,7 +55,7 @@ public class MultipleOrderFileBuilder {
         }
     }
 
-    // todo: перенос строки при заполнении 2+ товаров
+    //fixme: числа читаются экселем как строки - в файле работать с ними как с числами невозможно
     public void fillInfo(List<String> info, int startRowNumber) throws ExceedingLineLimitException {
         // fixme: завершит ли метод работу выбрасыванием ошибки или всё-таки обернуть в if-else?
         // todo: обработать исключение - вернуть уведомление об этом как ответ сервера на request
@@ -84,7 +70,6 @@ public class MultipleOrderFileBuilder {
                 for(String str : strInInfo) {
                     if(totalCellsInSheet > MAX_CELL_NUMBER) throw new ExceedingLineLimitException("Exceeded maximum cell number");
                     totalCellsInSheet++;
-                    //fixme: [] и запятые приходят уже на этапе orderContentList
                     row.createCell(cellInRow).setCellValue(str.replaceAll("[\\[,\\]]", ""));
                     cellInRow++;
                 }
@@ -127,8 +112,8 @@ public class MultipleOrderFileBuilder {
     private List<String> convertObjectToStringList(@org.jetbrains.annotations.NotNull List<Object> objectList) {
         List<String> stringList = new ArrayList<>();
         for (Object object : objectList) {
-            String classFieldValues = object.toString(); // вот тут и юзается override toString()
-//            stringList = Arrays.asList(classFieldValues.split(";"));
+            // fixme: а этом этапе появляются [] ,
+            String classFieldValues = (object.toString()).replaceAll("[\\[,\\]]", ""); // вот тут и юзается override toString()
             stringList = Arrays.asList(classFieldValues.split("\n"));
         }
         return stringList;
